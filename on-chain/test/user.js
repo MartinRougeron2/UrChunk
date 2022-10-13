@@ -71,6 +71,8 @@ contract('User', function (accounts) {
 
         assert.equal(contract_post_owner, contract.address, "owner is not accounts[1]");
         assert.equal(post_length, 1, "post_length is not 1");
+        post_length = await o_contract.getPostsLength({from: accounts[0]});
+        assert.equal(post_length, 0, "post_length is not 0");
 
     });
 

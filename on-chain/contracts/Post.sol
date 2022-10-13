@@ -34,9 +34,9 @@ contract Post is IPost {
         // emit event of ownership change
         emit OwnershipChanged(oldOwner, owner);
         // detect if the post was sold
-//        User user = User(oldOwner);
-//        // if the post was sold, the user's posts will be updated
-//        user.removePost(address(this));
+        User user = User(oldOwner);
+        // if the post was sold, the user's posts will be updated
+        user.removePost(address(this));
     }
 
     // like the post !
