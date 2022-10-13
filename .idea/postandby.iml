@@ -3,6 +3,10 @@
   <component name="NewModuleRootManager">
     <content url="file://$MODULE_DIR$">
       <excludeFolder url="file://$MODULE_DIR$/venv" />
+      <excludeFolder url="file://$MODULE_DIR$/.idea/ZeppelinRemoteNotebooks" />
+      <excludeFolder url="file://$MODULE_DIR$/on-chain/contracts/artifacts" />
+      <excludeFolder url="file://$MODULE_DIR$/on-chain/contracts/artifacts/build-info" />
+      <excludeFolder url="file://$MODULE_DIR$/on-chain/build" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

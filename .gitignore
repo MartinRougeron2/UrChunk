@@ -1,0 +1,7 @@
+/.idea/
+/off-chain/node_modules/
+/off-chain/yarn.lock
+/on-chain/nodes-modules/
+/on-chain/contracts/artifacts/build-info/
+/on-chain/contracts/artifacts/
+/on-chain/build/
