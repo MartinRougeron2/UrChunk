@@ -27,10 +27,10 @@ interface IPost {
     function buy(address _user) external payable;
 
     // like the post
-    function like() external;
+    function like(address _user) external;
 
     // change price of the post
-    function changePrice(int64 _price) external;
+    function changePrice(int64 _price, address _user_sender) external;
 
     // get owner
     function getOwner() external view returns (address);

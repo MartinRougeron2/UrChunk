@@ -8,7 +8,9 @@ import "./IPost.sol";
 contract Post is IPost {
     string public title;
     string public content;
+    // User address ! NOT ACCOUNT
     address public author;
+    // User address ! NOT ACCOUNT
     address public owner;
     uint public createdAt;
     int64 public price;
@@ -41,16 +43,19 @@ contract Post is IPost {
     }
 
     // like the post
-    function like() public override {
-        require(likes[msg.sender] == false, "You already liked this post");
-        likes[msg.sender] = true;
+    function like(address _user) public override {
+        require(likes[_user] == false, "You already liked this post");
+        likes[_user] = true;
         likesCount++;
-        emit Liked(msg.sender);
+        emit Liked(_user);
     }
 
     // change price of the post
-    function changePrice(int64 _price) public override {
-        require(msg.sender == owner, "You must be the owner of this post to change the price");
+    function changePrice(int64 _price, address _user_sender) public override {
+        User user = User(owner);
+        User sender = User(_user_sender);
+        require(address(sender.owner()) == msg.sender, "You must be the owner of this user to change the price");
+        require(address(user.owner()) == address(sender.owner()), "You must be the owner of this post to change the price");
         price = _price;
         // emit event of price change
         emit PriceChanged(price);
