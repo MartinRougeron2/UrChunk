@@ -30,7 +30,7 @@ contract Post is IPost {
         require(msg.value == uint64(price), "You must pay the price to buy this post");
         address oldOwner = owner;
         owner = _user;
-        User(_user).owner().transfer(msg.value);
+        User(oldOwner).owner().transfer(msg.value);
         // emit event of ownership change
         emit OwnershipChanged(oldOwner, owner);
         // detect if the post was sold
