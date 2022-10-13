@@ -49,6 +49,7 @@ contract('Post', function (accounts) {
 
         let newPrice = await contract.price({from: accounts[0]});
         newPrice = newPrice.toString();
+
         assert.equal(newPrice, 2, "price is not 2");
     });
 });

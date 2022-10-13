@@ -34,19 +34,24 @@ contract User is IUser {
     // update user name
     function updateName(string memory _name) public override {
         require(msg.sender == owner, "You must be the owner of this user to update the name");
+        // update name
         name = _name;
+        // emit event of name update
         emit NameUpdated(name);
     }
 
     // update user email
     function updateEmail(string memory _email) public override {
         require(msg.sender == owner, "You must be the owner of this user to update the email");
+        // update email
         email = _email;
+        // emit event of email update
         emit EmailUpdated(email);
     }
 
     // get email
     function getEmail() public view override returns (string memory) {
+        // return email if the user is the owner of the account
         require(msg.sender == owner, "You must be the owner of this user to show the email");
         return email;
     }
@@ -55,15 +60,20 @@ contract User is IUser {
     function transferOwnership(address _newOwner) public override {
         require(msg.sender == owner, "You must be the owner of this user to transfer ownership");
         address oldOwner = owner;
+        // transfer ownership
         owner = payable(_newOwner);
+        // emit event of ownership change
         emit OwnershipTransferred(oldOwner, owner);
     }
 
     // buy a user
     function buyUser() public payable override {
         require(msg.value == uint64(price), "You must pay the price to buy this user");
+
         address oldOwner = owner;
+        // transfer ownership
         owner = payable(msg.sender);
+        // transfer money
         payable(oldOwner).transfer(msg.value);
         // emit event of ownership change
         emit OwnershipTransferred(oldOwner, owner);
@@ -76,6 +86,7 @@ contract User is IUser {
         Post post = new Post(_title, _content, _price, address(this));
         // add to users posts array
         posts.push(address(post));
+        // emit event of post creation
         emit PostCreatedFromUser(address(post));
         return address(post);
     }
@@ -92,6 +103,7 @@ contract User is IUser {
         post.buy{value: msg.value}(address(this));
         // add to users posts array
         posts.push(_post);
+        // emit event of post creation
         emit PostSold(_post);
     }
 
@@ -104,8 +116,10 @@ contract User is IUser {
     // user follow another user
     function follow(address _user) public override {
         require(msg.sender == owner, "You must be the owner of this user to follow another user");
+        // add to following
         following[_user] = true;
         followingCount++;
+        // emit event of follow
         emit Followed(_user);
     }
 
@@ -120,8 +134,10 @@ contract User is IUser {
             // find post in array
             if (posts[i] == _post) {
                 if (!isPostOwner(_post)) {
+                    // remove post from array
                     posts[i] = posts[posts.length - 1];
                     posts.pop();
+                    // emit event of post removal
                     emit PostSold(_post);
                 }
             }
