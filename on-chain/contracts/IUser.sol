@@ -22,7 +22,10 @@ interface IUser {
     function getEmail() external view returns (string memory);
 
     // create a new post
-    function createPost(string memory _title, string memory _content, int64 _price) external;
+    function createPost(string memory _title, string memory _content, int64 _price) external returns (address);
+
+    // get posts length
+    function getPostsLength() external view returns (uint256);
 
     // buy a post
     function buyPost(address _post) external payable;
@@ -30,11 +33,11 @@ interface IUser {
     // detect if a post is owned by the user
     function isPostOwner(address _post) external view returns (bool);
 
-    // detect if on of my posts was sold
-    function detectSoldPosts() external;
-
     // user follow another user
     function follow(address _user) external;
+
+    // get user followers count
+    function getFollowingCount() external view returns (uint256);
 
     // remove a post from the user if not owned by the user
     function removePost(address _post) external;

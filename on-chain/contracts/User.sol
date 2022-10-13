@@ -4,13 +4,20 @@ pragma solidity >=0.7.0 <0.9.0;
 
 import "./IUser.sol";
 import "./Post.sol";
+import "./IPost.sol";
 
 contract User is IUser {
+    // user's name
     string public name;
+    // user's address
     string private email;
-    address public owner;
+    // user's address
+    address payable public owner;
+    // user's posts
     address[] public posts;
+    // user's followers
     mapping(address => bool) public following;
+    // user's followers count
     uint256 followingCount;
     // price of the user
     int64 public price;
@@ -18,8 +25,9 @@ contract User is IUser {
     constructor(string memory _name, string memory _email, int64 _price) {
         name = _name;
         email = _email;
-        owner = msg.sender;
+        owner = payable(msg.sender);
         price = _price;
+        followingCount = 0;
         emit UserCreated(address(this));
     }
 
@@ -47,7 +55,7 @@ contract User is IUser {
     function transferOwnership(address _newOwner) public override {
         require(msg.sender == owner, "You must be the owner of this user to transfer ownership");
         address oldOwner = owner;
-        owner = _newOwner;
+        owner = payable(_newOwner);
         emit OwnershipTransferred(oldOwner, owner);
     }
 
@@ -55,7 +63,7 @@ contract User is IUser {
     function buyUser() public payable override {
         require(msg.value == uint64(price), "You must pay the price to buy this user");
         address oldOwner = owner;
-        owner = msg.sender;
+        owner = payable(msg.sender);
         payable(oldOwner).transfer(msg.value);
         // emit event of ownership change
         emit OwnershipTransferred(oldOwner, owner);
@@ -63,25 +71,32 @@ contract User is IUser {
 
 
     // create a new post
-    function createPost(string memory _title, string memory _content, int64 _price) public override {
+    function createPost(string memory _title, string memory _content, int64 _price) public override returns (address) {
         require(msg.sender == owner, "You must be the owner of this user to create a post");
-        Post post = new Post(_title, _content, _price);
+        Post post = new Post(_title, _content, _price, address(this));
         posts.push(address(post));
         emit PostCreated(address(post));
+        return address(post);
+    }
+
+    // get posts length
+    function getPostsLength() public view override returns (uint256) {
+        return posts.length;
     }
 
     // buy a post
     function buyPost(address _post) public payable override {
-        IPost post = IPost(_post);
-        post.buy{value: msg.value}();
+        Post post = Post(_post);
+        // buy the post
+        post.buy{value: msg.value}(address(this));
         posts.push(_post);
         emit PostSold(_post);
     }
 
     // detect if a post is owned by the user
     function isPostOwner(address _post) public view override returns (bool) {
-        IPost post = IPost(_post);
-        return post.getOwner() == owner;
+        Post post = Post(_post);
+        return post.getOwner() == address(this);
     }
 
     // user follow another user
@@ -92,16 +107,9 @@ contract User is IUser {
         emit Followed(_user);
     }
 
-    // detect if on of my posts was sold
-    function detectSoldPosts() public override {
-        for (uint i = 0; i < posts.length; i++) {
-            IPost post = IPost(posts[i]);
-            if (post.getOwner() != owner) {
-                posts[i] = posts[posts.length - 1];
-                posts.pop();
-                emit PostSold(address(post));
-            }
-        }
+    // get user followers count
+    function getFollowingCount() public view override returns (uint256) {
+        return followingCount;
     }
 
     // remove a post from the user if not owned by the user

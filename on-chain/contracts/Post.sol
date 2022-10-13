@@ -2,7 +2,7 @@
 
 pragma solidity >=0.7.0 <0.9.0;
 
-import "./IUser.sol";
+import "./User.sol";
 import "./IPost.sol";
 
 contract Post is IPost {
@@ -15,27 +15,28 @@ contract Post is IPost {
     mapping(address => bool) public likes;
     uint256 public likesCount;
 
-    constructor(string memory _title, string memory _content, int64 _price) {
+    constructor(string memory _title, string memory _content, int64 _price, address _author) {
         title = _title;
         content = _content;
-        author = msg.sender;
-        owner = msg.sender;
+        author = _author;
+        owner = _author;
         createdAt = uint(block.timestamp);
         price = _price;
         emit PostCreated(address(this));
     }
 
     // change ownership of the post by paying the price !
-    function buy() public payable override {
+    function buy(address _user) public payable override {
         require(msg.value == uint64(price), "You must pay the price to buy this post");
         address oldOwner = owner;
-        owner = msg.sender;
-        payable(oldOwner).transfer(msg.value);
+        owner = _user;
+        User(_user).owner().transfer(msg.value);
         // emit event of ownership change
         emit OwnershipChanged(oldOwner, owner);
         // detect if the post was sold
-        IUser user = IUser(oldOwner);
-        user.removePost(address(this));
+//        User user = User(oldOwner);
+//        // if the post was sold, the user's posts will be updated
+//        user.removePost(address(this));
     }
 
     // like the post !

@@ -15,7 +15,7 @@ interface IPost {
     }
 
     // change ownership of the post by paying the price
-    function buy() external payable;
+    function buy(address _user) external payable;
 
     // like the post
     function like() external;
