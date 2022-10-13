@@ -22,10 +22,11 @@ contract Post is IPost {
         owner = _author;
         createdAt = uint(block.timestamp);
         price = _price;
+        likesCount = 0;
         emit PostCreated(address(this));
     }
 
-    // change ownership of the post by paying the price !
+    // change ownership of the post by paying the price
     function buy(address _user) public payable override {
         require(msg.value == uint64(price), "You must pay the price to buy this post");
         address oldOwner = owner;
@@ -39,7 +40,7 @@ contract Post is IPost {
         user.removePost(address(this));
     }
 
-    // like the post !
+    // like the post
     function like() public override {
         require(likes[msg.sender] == false, "You already liked this post");
         likes[msg.sender] = true;
@@ -47,7 +48,7 @@ contract Post is IPost {
         emit Liked(msg.sender);
     }
 
-    // change price of the post !
+    // change price of the post
     function changePrice(int64 _price) public override {
         require(msg.sender == owner, "You must be the owner of this post to change the price");
         price = _price;
@@ -55,18 +56,8 @@ contract Post is IPost {
         emit PriceChanged(price);
     }
 
-    // get owner !
+    // get owner
     function getOwner() public view override returns (address) {
         return owner;
     }
-
-
-    // event of Post creation
-    event PostCreated(address post);
-    // event of like
-    event Liked(address user);
-    // event of ownership change
-    event OwnershipChanged(address oldOwner, address newOwner);
-    // event of price change
-    event PriceChanged(int64 price);
 }

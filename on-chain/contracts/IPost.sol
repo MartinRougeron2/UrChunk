@@ -14,6 +14,15 @@ interface IPost {
         uint256 likesCount;
     }
 
+    // event of Post creation
+    event PostCreated(address post);
+    // event of like
+    event Liked(address user);
+    // event of ownership change
+    event OwnershipChanged(address oldOwner, address newOwner);
+    // event of price change
+    event PriceChanged(int64 price);
+
     // change ownership of the post by paying the price
     function buy(address _user) external payable;
 
@@ -25,13 +34,4 @@ interface IPost {
 
     // get owner
     function getOwner() external view returns (address);
-
-//    // event of Post creation
-//    event PostCreated(address post);
-//    // event of like
-//    event Liked(address user);
-//    // event of ownership change
-//    event OwnershipChanged(address oldOwner, address newOwner);
-//    // event of price change
-//    event PriceChanged(int64 price);
 }

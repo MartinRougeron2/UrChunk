@@ -4,13 +4,38 @@ pragma solidity >=0.7.0 <0.9.0;
 
 interface IUser {
     struct User {
+        // user's name
         string name;
+        // user's address
         string email;
-        address owner;
-        mapping(address => bool) posts;
-        mapping(address => bool) followers;
+        // user's address
+        address payable owner;
+        // user's posts
+        address[] posts;
+        // user's followers
+        mapping(address => bool) following;
+        // user's followers count
         uint256 followingCount;
+        // price of the user
+        int64 price;
     }
+
+    // event of user creation
+    event UserCreated(address user);
+    // event of name update
+    event NameUpdated(string name);
+    // event of email update
+    event EmailUpdated(string email);
+    // event of post creation
+    event PostCreatedFromUser(address post);
+    // event of post sold
+    event PostSold(address post);
+    // event of following another user
+    event Followed(address user);
+    // event of ownership transfer
+    event OwnershipTransferred(address oldOwner, address newOwner);
+    // event of user bought
+    event UserBought(address user);
 
     // update user name
     function updateName(string memory _name) external;
@@ -20,6 +45,12 @@ interface IUser {
 
     // get email
     function getEmail() external view returns (string memory);
+
+    // transfer ownership of the user
+    function transferOwnership(address _newOwner) external;
+
+    // buy a user
+    function buyUser() external payable;
 
     // create a new post
     function createPost(string memory _title, string memory _content, int64 _price) external returns (address);
@@ -41,26 +72,4 @@ interface IUser {
 
     // remove a post from the user if not owned by the user
     function removePost(address _post) external;
-
-    // transfer ownership of the user
-    function transferOwnership(address _newOwner) external;
-
-    // buy a user
-    function buyUser() external payable;
-
-
-//    // event of name update
-//    event NameUpdated(string name);
-//    // event of email update
-//    event EmailUpdated(string email);
-//    // event of post creation
-//    event PostCreated(address post);
-//    // event of post sold
-//    event PostSold(address post);
-//    // event of following another user
-//    event Followed(address user);
-//    // event of ownership transfer
-//    event OwnershipTransferred(address oldOwner, address newOwner);
-//    // event of user bought
-//    event UserBought(address user);
 }

@@ -74,8 +74,9 @@ contract User is IUser {
     function createPost(string memory _title, string memory _content, int64 _price) public override returns (address) {
         require(msg.sender == owner, "You must be the owner of this user to create a post");
         Post post = new Post(_title, _content, _price, address(this));
+        // add to users posts array
         posts.push(address(post));
-        emit PostCreated(address(post));
+        emit PostCreatedFromUser(address(post));
         return address(post);
     }
 
@@ -89,6 +90,7 @@ contract User is IUser {
         Post post = Post(_post);
         // buy the post
         post.buy{value: msg.value}(address(this));
+        // add to users posts array
         posts.push(_post);
         emit PostSold(_post);
     }
@@ -115,6 +117,7 @@ contract User is IUser {
     // remove a post from the user if not owned by the user
     function removePost(address _post) public override {
         for (uint i = 0; i < posts.length; i++) {
+            // find post in array
             if (posts[i] == _post) {
                 if (!isPostOwner(_post)) {
                     posts[i] = posts[posts.length - 1];
@@ -124,21 +127,4 @@ contract User is IUser {
             }
         }
     }
-
-    // event of user creation
-    event UserCreated(address user);
-    // event of name update
-    event NameUpdated(string name);
-    // event of email update
-    event EmailUpdated(string email);
-    // event of post creation
-    event PostCreated(address post);
-    // event of post sold
-    event PostSold(address post);
-    // event of following another user
-    event Followed(address user);
-    // event of ownership transfer
-    event OwnershipTransferred(address oldOwner, address newOwner);
-    // event of user bought
-    event UserBought(address user);
 }
