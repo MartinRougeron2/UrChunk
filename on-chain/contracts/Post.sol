@@ -44,6 +44,8 @@ contract Post is IPost {
 
     // like the post
     function like(address _user) public override {
+        User user = User(_user);
+        require(user.owner() == msg.sender, "You must be the owner of the user to like this post");
         require(likes[_user] == false, "You already liked this post");
         likes[_user] = true;
         likesCount++;
