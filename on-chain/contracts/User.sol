@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: UNLICENSED
 
-pragma solidity >=0.7.0 <0.9.0;
+pragma solidity 0.8.17;
 
 import "./IUser.sol";
 import "./Post.sol";
@@ -13,8 +13,6 @@ contract User is IUser {
     string private email;
     // user's address
     address payable public owner;
-    // user's posts
-    address[] public posts;
     // user's followers
     mapping(address => bool) public following;
     // user's followers count
@@ -58,6 +56,8 @@ contract User is IUser {
 
     // transfer ownership of the user
     function transferOwnership(address _newOwner) public override {
+        // check if _newOwner is address(0)
+        require(_newOwner != address(0), "New owner cannot be address(0)");
         require(msg.sender == owner, "You must be the owner of this user to transfer ownership");
         address oldOwner = owner;
         // transfer ownership
@@ -81,30 +81,22 @@ contract User is IUser {
 
 
     // create a new post
-    function createPost(string memory _title, string memory _content, int64 _price) public override returns (address) {
+    function createPost(string memory _title, string memory _content, uint64 _price) public override returns (address) {
         require(msg.sender == owner, "You must be the owner of this user to create a post");
         Post post = new Post(_title, _content, _price, address(this));
-        // add to users posts array
-        posts.push(address(post));
         // emit event of post creation
         emit PostCreatedFromUser(address(post));
         return address(post);
     }
 
-    // get posts length
-    function getPostsLength() public view override returns (uint256) {
-        return posts.length;
-    }
 
     // buy a post
     function buyPost(address _post) public payable override {
         Post post = Post(_post);
         // buy the post
         post.buy{value: msg.value}(address(this));
-        // add to users posts array
-        posts.push(_post);
         // emit event of post creation
-        emit PostSold(_post);
+        emit PostBuyFromUser(_post);
     }
 
     // detect if a post is owned by the user
@@ -128,19 +120,4 @@ contract User is IUser {
         return followingCount;
     }
 
-    // remove a post from the user if not owned by the user
-    function removePost(address _post) public override {
-        for (uint i = 0; i < posts.length; i++) {
-            // find post in array
-            if (posts[i] == _post) {
-                if (!isPostOwner(_post)) {
-                    // remove post from array
-                    posts[i] = posts[posts.length - 1];
-                    posts.pop();
-                    // emit event of post removal
-                    emit PostSold(_post);
-                }
-            }
-        }
-    }
 }

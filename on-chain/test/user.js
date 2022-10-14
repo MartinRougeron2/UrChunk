@@ -49,10 +49,9 @@ contract('User', function (accounts) {
     it('createPost', async function () {
         let contract = await User.new("martin-test", "@", 1, {from: accounts[0]});
 
-        await contract.createPost("create-post-name", "create-post-content", 1); // function tested
-        const contract_post_address = await contract.posts(0);
-
-        assert(contract_post_address, "contract_post_address is not defined");
+        const tx = await contract.createPost("create-post-name", "create-post-content", 1); // function tested
+        const postAddress = tx.logs[0].address;
+        assert(postAddress, "contract_post_address is not defined");
     });
 
     it('buyPost', async function () {
@@ -62,24 +61,15 @@ contract('User', function (accounts) {
 
         // check if initial owner is base_owner_contract
         let contract_post_owner = await contract_post.owner({from: accounts[1]});
-        let post_length = await new_owner_contract.getPostsLength({from: accounts[1]});
 
         assert.equal(contract_post_owner, base_owner_contract.address, "owner is not accounts[0]");
         // check if new_owner_contract has no posts
-        assert.equal(post_length, 0, "post_length is not 0");
 
         // buy post
         await new_owner_contract.buyPost(contract_post.address, {from: accounts[1], value: 1}); // function tested
         contract_post_owner = await contract_post.owner({from: accounts[1]});
-        post_length = await new_owner_contract.getPostsLength({from: accounts[1]});
 
         assert.equal(contract_post_owner, new_owner_contract.address, "owner is not accounts[1]");
-        // check if new_owner_contract has 1 post
-        assert.equal(post_length, 1, "post_length is not 1");
-        post_length = await base_owner_contract.getPostsLength({from: accounts[0]});
-        // check if base_owner_contract has 0 posts
-        assert.equal(post_length, 0, "post_length is not 0");
-
     });
 
     it('isPostOwner', async function () {

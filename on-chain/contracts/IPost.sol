@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: UNLICENSED
 
-pragma solidity >=0.7.0 <0.9.0;
+pragma solidity 0.8.17;
 
 interface IPost {
     struct Post {
@@ -21,7 +21,7 @@ interface IPost {
     // event of ownership change
     event OwnershipChanged(address oldOwner, address newOwner);
     // event of price change
-    event PriceChanged(int64 price);
+    event PriceChanged(uint64 price);
 
     // change ownership of the post by paying the price
     function buy(address _user) external payable;
@@ -30,7 +30,7 @@ interface IPost {
     function like(address _user) external;
 
     // change price of the post
-    function changePrice(int64 _price, address _user_sender) external;
+    function changePrice(uint64 _price, address _user_sender) external;
 
     // get owner
     function getOwner() external view returns (address);

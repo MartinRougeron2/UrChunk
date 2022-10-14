@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: UNLICENSED
 
-pragma solidity >=0.7.0 <0.9.0;
+pragma solidity 0.8.17;
 
 interface IUser {
     struct User {
@@ -28,6 +28,8 @@ interface IUser {
     event EmailUpdated(string email);
     // event of post creation
     event PostCreatedFromUser(address post);
+    // event of post buy
+    event PostBuyFromUser(address post);
     // event of post sold
     event PostSold(address post);
     // event of following another user
@@ -53,10 +55,7 @@ interface IUser {
     function buyUser() external payable;
 
     // create a new post
-    function createPost(string memory _title, string memory _content, int64 _price) external returns (address);
-
-    // get posts length
-    function getPostsLength() external view returns (uint256);
+    function createPost(string memory _title, string memory _content, uint64 _price) external returns (address);
 
     // buy a post
     function buyPost(address _post) external payable;
@@ -69,7 +68,4 @@ interface IUser {
 
     // get user followers count
     function getFollowingCount() external view returns (uint256);
-
-    // remove a post from the user if not owned by the user
-    function removePost(address _post) external;
 }
