@@ -1,4 +1,6 @@
 // react component to interact with the express server
+import {useEffect, useState} from "react";
+
 const User = ({user}) => {
     const [isOwner, setIsOwner] = useState(false);
     const [isBuyer, setIsBuyer] = useState(false);

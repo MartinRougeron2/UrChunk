@@ -1,4 +1,3 @@
-
 const getPosts = async () => {
     try {
         const response = await fetch('http://localhost:3000/api/posts');
@@ -11,12 +10,14 @@ const getPosts = async () => {
 }
 
 const posts = getPosts();
-// display all the posts
-const postList = posts.map((post) => {
-  return (
-    <div className="User__post">
-      <div className="User__post__name">{post.name}</div>
-      <div className="User__post__content">{post.content}</div>
-    </div>
-  );
-});
+// react component display all the posts
+const Posts = () => {
+    return (
+        <div className="Posts">
+            {posts.map((post) => (
+                <Post post={post}/>
+            ))}
+        </div>
+    );
+}
+
