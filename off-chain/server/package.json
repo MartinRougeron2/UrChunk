@@ -1,0 +1,8 @@
+{
+  "dependencies": {
+    "express": "^4.18.2",
+    "mongoose": "^6.6.5",
+    "truffle-contract": "^4.0.31",
+    "web3": "^1.8.0"
+  }
+}
