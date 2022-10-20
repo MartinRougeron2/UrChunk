@@ -63,6 +63,23 @@ const cookieParser = require("cookie-parser");
 
 app.use(cookieParser());
 
+app.get('/check-auth', (req, res) => {
+    const token = req.cookies.token;
+    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
+    res.setHeader('Access-Control-Allow-Credentials', true);
+    if (!token) {
+        res.status(401).json({message: "Unauthorized"});
+    } else {
+        jwt.verify(token, 'secret', (err, decoded) => {
+            if (err) {
+                res.status(401).json({message: "Unauthorized"});
+            } else {
+                res.status(200).json({message: "Authorized"});
+            }
+        });
+    }
+});
+
 // log user using web3 and return jwt token
 app.post('/login', async (req, res) => {
     console.log(req.cookies.token);
@@ -97,46 +114,6 @@ app.post('/login', async (req, res) => {
             secure: true,
             sameSite: "none",
         }).status(200).send('Login success');
-    });
-});
-
-// add post to database
-app.post('/addPost', async (req, res) => {
-    // check jwt token
-    const token = req.body.token;
-    if (!token) {
-        res.status(401).send('No token provided');
-        return;
-    }
-    jwt.verify(token, 'secret', async (err, decoded) => {
-        if (err) {
-            res.status(401).send('Invalid token');
-            return;
-        }
-        // get user address from req
-        const address = req.body.address;
-        // get user contract
-        const userContract = await User.at(address);
-        // check if user is the same as the one in the token
-        const userAddress = await userContract.getOwner();
-        if (userAddress !== decoded.address) {
-            res.status(401).send('Invalid token');
-            return;
-        }
-        // create post
-        const tx = await userContract.createPost(req.body.name, req.body.content, req.body.price, userAddress, {from: decoded.address});
-        const postAddress = tx.logs[0].address;
-        // add post to database
-        const post = new PostDB({
-            address: postAddress,
-            name: req.body.name,
-            content: req.body.content,
-            price: req.body.price,
-            author: userAddress,
-        });
-        await post.save();
-        // return post address
-        res.status(200).send({postAddress: postAddress});
     });
 });
 
@@ -176,6 +153,9 @@ app.post('/create-user', async (req, res) => {
 
 // create post
 app.post('/create-post', async (req, res) => {
+    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
+    res.setHeader('Access-Control-Allow-Credentials', true);
+    console.log(req.cookies);
     // check jwt token
     const token = req.cookies.token;
     if (!token) {
@@ -184,6 +164,7 @@ app.post('/create-post', async (req, res) => {
     }
     jwt.verify(token, 'secret', async (err, decoded) => {
         if (err) {
+            console.log(err);
             res.status(401).send('Invalid token');
             return;
         }
@@ -195,12 +176,13 @@ app.post('/create-post', async (req, res) => {
         const userContract = await User.at(userContractDB.address);
         // check if user is the same as the one in the token
         const userAddress = await userContract.owner();
-        if (userAddress !== decoded.address) {
+
+        if (userAddress.toString().toLowerCase() !== decoded.address.toString().toLowerCase()) {
             res.status(401).send('Invalid token');
             return;
         }
         // create post
-        const tx = await userContract.createPost(req.body.name, req.body.content, req.body.price, {from: decoded.address});
+        const tx = await userContract.createPost(req.body.title, req.body.content, req.body.price, {from: decoded.address});
         const postAddress = tx.logs[0].address;
         // add post to database
         const post = new PostDB({
@@ -210,8 +192,7 @@ app.post('/create-post', async (req, res) => {
             price: req.body.price,
             owner: userContract.address,
             author: userContract.address,
-            // createdAt: Date.now(),
-            createdAt: new Date.now(),
+            createdAt: Date.now(),
             likes: [],
         });
         await post.save();

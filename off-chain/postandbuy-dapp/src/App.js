@@ -46,6 +46,15 @@ function createPost(title, content, price) {
     });
 }
 
+function checkAuth() {
+    return axios.get('http://localhost:8000/check-auth').then(res => {
+        console.log(res);
+        return res;
+    }).catch(err => {
+        console.error(err);
+    });
+}
+
 // Language: javascript
 const App = () => {
     axios.defaults.withCredentials = true;
@@ -152,6 +161,11 @@ const App = () => {
         });
     }
 
+    const handleCheckAuth = async () => {
+        const res = await checkAuth();
+        console.log(res);
+    }
+
     const handleCreateUserSubmit = async (event) => {
         event.preventDefault();
         const name = event.target.elements.name.value;
@@ -196,39 +210,48 @@ const App = () => {
                 </button>
                 <br/>
             </div>
-            <div>
-                <form onSubmit={handleCreateUserSubmit}>
-                    <label>
-                        Name:
-                        <input type="text" name="name"/>
-                    </label>
-                    <label>
-                        Email:
-                        <input type="text" name="email"/>
-                    </label>
-                    <label>
-                        Price:
-                        <input type="text" name="price"/>
-                    </label>
-                    <input type="submit" value="Submit"/>
-                </form>
-            </div>
-            <div>
-                <form onSubmit={handleCreatePostSubmit}>
-                    <label>
-                        Title:
-                        <input type="text" name="title"/>
-                    </label>
-                    <label>
-                        Content:
-                        <input type="text" name="content"/>
-                    </label>
-                    <label>
-                        Price:
-                        <input type="text" name="price"/>
-                    </label>
-                    <input type="submit" value="Submit"/>
-                </form>
+            <button
+                onClick={handleCheckAuth}
+                className="connect-to-wallet-button">
+                Check Auth
+            </button>
+            <div style={{display: 'block', justifyContent: 'center', height: '500px'}}>
+                <div style={{width: 100 + 'vw', height: 20 + 'vh', margin: "50px 0 0 0"}}>
+                    Create User
+                    <form onSubmit={handleCreateUserSubmit}>
+                        <label>
+                            Name:
+                            <input type="text" name="name"/>
+                        </label>
+                        <label>
+                            Email:
+                            <input type="text" name="email"/>
+                        </label>
+                        <label>
+                            Price:
+                            <input type="text" name="price"/>
+                        </label>
+                        <input type="submit" value="Submit"/>
+                    </form>
+                </div>
+                <div style={{width: 100 + 'vw', height: 20 + 'vh'}}>
+                    Create Post
+                    <form onSubmit={handleCreatePostSubmit}>
+                        <label>
+                            Title:
+                            <input type="text" name="title"/>
+                        </label>
+                        <label>
+                            Content:
+                            <input type="text" name="content"/>
+                        </label>
+                        <label>
+                            Price:
+                            <input type="text" name="price"/>
+                        </label>
+                        <input type="submit" value="Submit"/>
+                    </form>
+                </div>
             </div>
         </div>
     );

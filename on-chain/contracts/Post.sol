@@ -51,9 +51,6 @@ contract Post is IPost {
         // check if the user is a valid user
         require(_user != address(0), "User must be a valid user");
 
-        User user = User(_user);
-
-        require(user.owner() == msg.sender, "You must be the owner of the user to like this post");
         require(!likes[_user], "You already liked this post");
         // add like
         likes[_user] = true;
