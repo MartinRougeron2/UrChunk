@@ -55,6 +55,19 @@ function checkAuth() {
     });
 }
 
+function buyPost(postAddress, price) {
+    return axios.post('http://localhost:8000/buy-post', {
+        postAddress: postAddress,
+        price: price
+    }).then(res => {
+        console.log(res);
+        return res;
+    }).catch(err => {
+        console.error(err);
+    });
+}
+
+
 // Language: javascript
 const App = () => {
     axios.defaults.withCredentials = true;
@@ -196,6 +209,19 @@ const App = () => {
         console.log(res);
     }
 
+    const handleBuyPost = async (event) => {
+        event.preventDefault();
+        const postAddress = event.target.elements.postAddress.value;
+        const price = event.target.elements.price.value;
+        const res = await buyPost(postAddress, price);
+        if (!res) {
+            console.error("Error response from backend is null");
+            return;
+        }
+        console.log(res);
+    }
+
+
     return (
         <div className="App">
             <div style={{display: 'flex', justifyContent: 'center', height: '50px'}}>
@@ -216,7 +242,7 @@ const App = () => {
                 Check Auth
             </button>
             <div style={{display: 'block', justifyContent: 'center', height: '500px'}}>
-                <div style={{width: 100 + 'vw', height: 20 + 'vh', margin: "50px 0 0 0"}}>
+                <div style={{width: 100 + 'vw', height: 10 + 'vh', margin: "50px 0 0 0"}}>
                     Create User
                     <form onSubmit={handleCreateUserSubmit}>
                         <label>
@@ -234,7 +260,7 @@ const App = () => {
                         <input type="submit" value="Submit"/>
                     </form>
                 </div>
-                <div style={{width: 100 + 'vw', height: 20 + 'vh'}}>
+                <div style={{width: 100 + 'vw', height: 10 + 'vh'}}>
                     Create Post
                     <form onSubmit={handleCreatePostSubmit}>
                         <label>
@@ -244,6 +270,20 @@ const App = () => {
                         <label>
                             Content:
                             <input type="text" name="content"/>
+                        </label>
+                        <label>
+                            Price:
+                            <input type="text" name="price"/>
+                        </label>
+                        <input type="submit" value="Submit"/>
+                    </form>
+                </div>
+                <div style={{width: 100 + 'vw', height: 10 + 'vh'}}>
+                    Buy Post
+                    <form onSubmit={handleBuyPost}>
+                        <label>
+                            Post Address:
+                            <input type="text" name="postAddress"/>
                         </label>
                         <label>
                             Price:

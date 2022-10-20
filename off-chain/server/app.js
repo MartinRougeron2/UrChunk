@@ -63,6 +63,7 @@ const cookieParser = require("cookie-parser");
 
 app.use(cookieParser());
 
+// check jwt token OK
 app.get('/check-auth', (req, res) => {
     const token = req.cookies.token;
     res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
@@ -80,7 +81,7 @@ app.get('/check-auth', (req, res) => {
     }
 });
 
-// log user using web3 and return jwt token
+// log user using web3 and return jwt token OK
 app.post('/login', async (req, res) => {
     console.log(req.cookies.token);
 
@@ -117,7 +118,7 @@ app.post('/login', async (req, res) => {
     });
 });
 
-// create user
+// create user OK
 app.post('/create-user', async (req, res) => {
     // check jwt token
     const token = req.cookies.token;
@@ -151,7 +152,7 @@ app.post('/create-user', async (req, res) => {
     });
 });
 
-// create post
+// create post OK
 app.post('/create-post', async (req, res) => {
     res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
     res.setHeader('Access-Control-Allow-Credentials', true);
@@ -204,10 +205,12 @@ app.post('/create-post', async (req, res) => {
     });
 });
 
-// buy post
-app.post('/buyPost', async (req, res) => {
+// buy post OK
+app.post('/buy-post', async (req, res) => {
+    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
+    res.setHeader('Access-Control-Allow-Credentials', true);
     // check jwt token
-    const token = req.body.token;
+    const token = req.cookies.token;
     if (!token) {
         res.status(401).send('No token provided');
         return;
@@ -220,17 +223,17 @@ app.post('/buyPost', async (req, res) => {
         // get post address from req
         const postAddress = req.body.postAddress;
         // get user address from req
-        const userAddress = req.body.userAddress;
+        const userAddress = req.cookies.user;
         // get post contract
         const postContract = await Post.at(postAddress);
         // get post owner
-        const postOwner = await postContract.getOwner();
+        const postOwner = await postContract.owner();
         // get user contract
         const userContract = await User.at(userAddress);
         // get user owner
-        const userOwner = await userContract.getOwner();
+        const userOwner = await userContract.owner();
         // check if user is the same as the one in the token
-        if (userOwner !== decoded.address) {
+        if (userOwner.toString().toLowerCase() !== decoded.address.toString().toLowerCase()) {
             res.status(401).send('Invalid token');
             return;
         }
@@ -248,9 +251,11 @@ app.post('/buyPost', async (req, res) => {
 });
 
 // update user name
-app.post('/updateUserName', async (req, res) => {
+app.post('/update-username', async (req, res) => {
+    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
+    res.setHeader('Access-Control-Allow-Credentials', true);
     // check jwt token
-    const token = req.body.token;
+    const token = req.cookies.token;
     if (!token) {
         res.status(401).send('No token provided');
         return;
@@ -260,13 +265,13 @@ app.post('/updateUserName', async (req, res) => {
             res.status(401).send('Invalid token');
             return;
         }
-        // get user address from req
-        const address = req.body.address;
+        // get user address from cookies
+        const address = req.cookies.user;
         // get user contract
         const userContract = await User.at(address);
         // check if user is the same as the one in the token
-        const userAddress = await userContract.getOwner();
-        if (userAddress !== decoded.address) {
+        const userAddress = await userContract.owner();
+        if (userAddress.toString().toLowerCase() !== decoded.address.toString().toLowerCase()) {
             res.status(401).send('Invalid token');
             return;
         }
@@ -280,9 +285,11 @@ app.post('/updateUserName', async (req, res) => {
 });
 
 // update user email
-app.post('/updateUserEmail', async (req, res) => {
+app.post('/update-email', async (req, res) => {
+    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
+    res.setHeader('Access-Control-Allow-Credentials', true);
     // check jwt token
-    const token = req.body.token;
+    const token = req.cookies.token;
     if (!token) {
         res.status(401).send('No token provided');
         return;
@@ -292,13 +299,13 @@ app.post('/updateUserEmail', async (req, res) => {
             res.status(401).send('Invalid token');
             return;
         }
-        // get user address from req
-        const address = req.body.address;
+        // get user address from cookies
+        const address = req.cookies.user;
         // get user contract
         const userContract = await User.at(address);
         // check if user is the same as the one in the token
-        const userAddress = await userContract.getOwner();
-        if (userAddress !== decoded.address) {
+        const userAddress = await userContract.owner();
+        if (userAddress.toString() !== decoded.address.toString().toLowerCase()) {
             res.status(401).send('Invalid token');
             return;
         }
@@ -312,9 +319,11 @@ app.post('/updateUserEmail', async (req, res) => {
 });
 
 // transfer user ownership
-app.post('/transferUserOwnership', async (req, res) => {
+app.post('/transfer-user-ownership', async (req, res) => {
+    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
+    res.setHeader('Access-Control-Allow-Credentials', true);
     // check jwt token
-    const token = req.body.token;
+    const token = req.cookies.token;
     if (!token) {
         res.status(401).send('No token provided');
         return;
@@ -329,8 +338,8 @@ app.post('/transferUserOwnership', async (req, res) => {
         // get user contract
         const userContract = await User.at(address);
         // check if user is the same as the one in the token
-        const userAddress = await userContract.getOwner();
-        if (userAddress !== decoded.address) {
+        const userAddress = await userContract.owner();
+        if (userAddress.toString().toLowerCase() !== decoded.address.toString().toLowerCase()) {
             res.status(401).send('Invalid token');
             return;
         }
@@ -344,9 +353,11 @@ app.post('/transferUserOwnership', async (req, res) => {
 });
 
 // buy user
-app.post('/buyUser', async (req, res) => {
+app.post('/buy-user', async (req, res) => {
+    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
+    res.setHeader('Access-Control-Allow-Credentials', true);
     // check jwt token
-    const token = req.body.token;
+    const token = req.cookies.token;
     if (!token) {
         res.status(401).send('No token provided');
         return;
@@ -357,13 +368,13 @@ app.post('/buyUser', async (req, res) => {
             return;
         }
         // get user address from req
-        const userAddress = req.body.userAddress;
+        const userAddress = req.cookies.user;
         // get user contract
         const userContract = await User.at(userAddress);
         // get user owner
-        const userOwner = await userContract.getOwner();
+        const userOwner = await userContract.owner();
         // check if user is the same as the one in the token
-        if (userOwner !== decoded.address) {
+        if (userOwner.toString().toLowerCase() !== decoded.address.toString().toLowerCase()) {
             res.status(401).send('Invalid token');
             return;
         }
@@ -377,9 +388,11 @@ app.post('/buyUser', async (req, res) => {
 });
 
 // follow user
-app.post('/followUser', async (req, res) => {
+app.post('/follow-user', async (req, res) => {
+    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
+    res.setHeader('Access-Control-Allow-Credentials', true);
     // check jwt token
-    const token = req.body.token;
+    const token = req.cookies.token;
     if (!token) {
         res.status(401).send('No token provided');
         return;
@@ -390,13 +403,13 @@ app.post('/followUser', async (req, res) => {
             return;
         }
         // get user address from req
-        const userAddress = req.body.userAddress;
+        const userAddress = req.cookies.user;
         // get user contract
         const userContract = await User.at(userAddress);
         // get user owner
-        const userOwner = await userContract.getOwner();
+        const userOwner = await userContract.owner();
         // check if user is the same as the one in the token
-        if (userOwner !== decoded.address) {
+        if (userOwner.toString().toLowerCase() !== decoded.address.toString().toLowerCase()) {
             res.status(401).send('Invalid token');
             return;
         }
@@ -410,9 +423,11 @@ app.post('/followUser', async (req, res) => {
 });
 
 // like post
-app.post('/likePost', async (req, res) => {
+app.post('/like-post', async (req, res) => {
+    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
+    res.setHeader('Access-Control-Allow-Credentials', true);
     // check jwt token
-    const token = req.body.token;
+    const token = req.cookies.token;
     if (!token) {
         res.status(401).send('No token provided');
         return;
@@ -427,7 +442,7 @@ app.post('/likePost', async (req, res) => {
         // get post contract
         const postContract = await Post.at(postAddress);
         // get post owner
-        const postOwner = await postContract.getOwner();
+        const postOwner = await postContract.owner();
         // check if user is the same as the one in the token
         if (postOwner !== decoded.address) {
             res.status(401).send('Invalid token');
@@ -443,9 +458,11 @@ app.post('/likePost', async (req, res) => {
 });
 
 // post change price
-app.post('/postChangePrice', async (req, res) => {
+app.post('/post-change-price', async (req, res) => {
+    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
+    res.setHeader('Access-Control-Allow-Credentials', true);
     // check jwt token
-    const token = req.body.token;
+    const token = req.cookies.token;
     if (!token) {
         res.status(401).send('No token provided');
         return;
@@ -460,9 +477,9 @@ app.post('/postChangePrice', async (req, res) => {
         // get post contract
         const postContract = await Post.at(postAddress);
         // get post owner
-        const postOwner = await postContract.getOwner();
+        const postOwner = await postContract.owner();
         // check if user is the same as the one in the token
-        if (postOwner !== decoded.address) {
+        if (postOwner.toString().toLowerCase() !== decoded.address.toString().toLowerCase()) {
             res.status(401).send('Invalid token');
             return;
         }
