@@ -27,14 +27,16 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node-
       - name: Install npm package
-        run: npm install truffle -g
+        run: |
+          npm install truffle -g
+          npm install ganache-cli -g
       - name: Start ganache
         run: |
-          ./node_modules/ganache-cli/cli.js -p 8545 --gasLimit=0x1fffffffffffff --allowUnlimitedContractSize -e 1000000000 > /dev/null &
+          ganache-cli -p 8545 --gasLimit=0x1fffffffffffff --allowUnlimitedContractSize -e 1000000000 > /dev/null &
           while netstat -lnt | awk '$4 ~ /:8545$/ {exit 1}'; do sleep 5; done
       - name: Migrate Contracts
-        run: ./node_modules/truffle/build/cli.bundled.js migrate --network development
+        run: truffle migrate --network development
       - name: Test Contracts
-        run: ./node_modules/truffle/build/cli.bundled.js test --network development
+        run: truffle test --network development
       - name: Stop ganache
         run: kill $(lsof -t -i:8545)
