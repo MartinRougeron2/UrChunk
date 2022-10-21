@@ -18,7 +18,9 @@ import {
     likePost,
     transferUserOwnership,
     updateUsername,
-    updateEmail
+    updateEmail,
+    getPosts,
+    getMyUsers,
 } from './requests';
 
 
@@ -248,6 +250,24 @@ const App = () => {
         }
     }
 
+    const handleGetPosts = async () => {
+        const res = await getPosts();
+        if (!res) {
+            console.error("Error response from backend is null");
+            return;
+        }
+        console.log(res);
+    }
+
+    const handleGetMyUsers = async () => {
+        const res = await getMyUsers();
+        if (!res) {
+            console.error("Error response from backend is null");
+            return;
+        }
+        console.log(res);
+    }
+
     return (
         <div className="App">
             <div style={{display: 'flex', justifyContent: 'center', height: '50px'}}>
@@ -286,6 +306,14 @@ const App = () => {
                         <input type="submit" value="Submit"/>
                     </form>
                 </div>
+                <div style={{width: 100 + 'vw', height: 10 + 'vh', margin: "50px 0 0 0"}}>
+                    Get my users
+                    <button
+                        onClick={handleGetMyUsers}
+                        className="connect-to-wallet-button">
+                        Get my users
+                    </button>
+                </div>
                 <div style={{width: 100 + 'vw', height: 10 + 'vh'}}>
                     Create Post
                     <form onSubmit={handleCreatePostSubmit}>
@@ -303,6 +331,14 @@ const App = () => {
                         </label>
                         <input type="submit" value="Submit"/>
                     </form>
+                </div>
+                <div style={{width: 100 + 'vw', height: 10 + 'vh'}}>
+                    Get Posts
+                    <button
+                        onClick={handleGetPosts}
+                        className="connect-to-wallet-button">
+                        Get Posts
+                    </button>
                 </div>
                 <div style={{width: 100 + 'vw', height: 10 + 'vh'}}>
                     Buy Post

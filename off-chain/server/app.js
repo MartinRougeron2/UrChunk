@@ -21,7 +21,7 @@ const {
 } = require('./posts');
 
 // import gets
-const {getAuth} = require('./gets');
+const {getAuth, posts, myUsers} = require('./gets');
 
 // import config
 const {corsOptions, port} = require('./config');
@@ -46,6 +46,8 @@ app.use(postChangePrice);
 
 // gets
 app.use(getAuth);
+app.use(posts);
+app.use(myUsers);
 
 // launch server
 app.listen(port, () => {

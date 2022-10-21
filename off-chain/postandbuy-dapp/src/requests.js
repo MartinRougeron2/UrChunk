@@ -141,3 +141,21 @@ export function likePost(postAddress) {
         console.error(err);
     });
 }
+
+export function getPosts() {
+    return axios.get('http://localhost:8000/posts').then(res => {
+        console.log(res);
+        return res;
+    }).catch(err => {
+        console.error(err);
+    });
+}
+
+export function getMyUsers() {
+    return axios.get('http://localhost:8000/my-users').then(res => {
+        console.log(res);
+        return res;
+    }).catch(err => {
+        console.error(err);
+    });
+}
