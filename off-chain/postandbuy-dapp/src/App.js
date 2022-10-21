@@ -67,6 +67,86 @@ function buyPost(postAddress, price) {
     });
 }
 
+function updateUsername(username) {
+    return axios.post('http://localhost:8000/update-username', {
+        name: username
+    }).then(res => {
+        console.log(res);
+        return res;
+    }).catch(err => {
+        console.error(err);
+    });
+}
+
+function updateEmail(email) {
+    return axios.post('http://localhost:8000/update-email', {
+        email: email
+    }).then(res => {
+        console.log(res);
+        return res;
+    }).catch(err => {
+        console.error(err);
+    });
+}
+
+function transferUserOwnership(newOwner) {
+    return axios.post('http://localhost:8000/transfer-user-ownership', {
+        newOwner: newOwner,
+    }).then(res => {
+        console.log(res);
+        return res;
+    }).catch(err => {
+        console.error(err);
+    });
+
+}
+
+function buyUser(addressToBuy, price) {
+    return axios.post('http://localhost:8000/buy-user', {
+        addressToBuy: addressToBuy,
+        price: price
+    }).then(res => {
+        console.log(res);
+        return res;
+    }).catch(err => {
+        console.error(err);
+    });
+
+}
+
+function followUser(userAddressToFollow) {
+    return axios.post('http://localhost:8000/follow-user', {
+        addressToFollow: userAddressToFollow
+    }).then(res => {
+        console.log(res);
+        return res;
+    }).catch(err => {
+        console.error(err);
+    });
+}
+
+function changePricePost(postAddress, newPrice) {
+    return axios.post('http://localhost:8000/post-change-price', {
+        postAddress: postAddress,
+        price: newPrice
+    }).then(res => {
+        console.log(res);
+        return res;
+    }).catch(err => {
+        console.error(err);
+    });
+}
+
+function likePost(postAddress) {
+    return axios.post('http://localhost:8000/like-post', {
+        postAddress: postAddress
+    }).then(res => {
+        console.log(res);
+        return res;
+    }).catch(err => {
+        console.error(err);
+    });
+}
 
 // Language: javascript
 const App = () => {
@@ -221,6 +301,78 @@ const App = () => {
         console.log(res);
     }
 
+    const handleUpdateUsername = async (event) => {
+        event.preventDefault();
+        const name = event.target.elements.name.value;
+        const res = await updateUsername(name);
+        if (!res) {
+            console.error("Error response from backend is null");
+            return;
+        }
+        console.log(res);
+    }
+
+    const handleUpdateEmail = async (event) => {
+        event.preventDefault();
+        const email = event.target.elements.email.value;
+        const res = await updateEmail(email);
+        if (!res) {
+            console.error("Error response from backend is null");
+            return;
+        }
+    }
+
+    const handleTransferUserOwnership = async (event) => {
+        event.preventDefault();
+        const address = event.target.elements.address.value;
+        const res = await transferUserOwnership(address);
+        if (!res) {
+            console.error("Error response from backend is null");
+            return;
+        }
+    }
+
+    const handleBuyUser = async (event) => {
+        event.preventDefault();
+        const address = event.target.elements.address.value;
+        const price = event.target.elements.price.value;
+        const res = await buyUser(address, price);
+        if (!res) {
+            console.error("Error response from backend is null");
+            return;
+        }
+    }
+
+    const handleFollowUser = async (event) => {
+        event.preventDefault();
+        const address = event.target.elements.address.value;
+        const res = await followUser(address);
+        if (!res) {
+            console.error("Error response from backend is null");
+            return;
+        }
+    }
+
+    const handleLikePost = async (event) => {
+        event.preventDefault();
+        const address = event.target.elements.address.value;
+        const res = await likePost(address);
+        if (!res) {
+            console.error("Error response from backend is null");
+            return;
+        }
+    }
+
+    const handleChangePricePost = async (event) => {
+        event.preventDefault();
+        const address = event.target.elements.address.value;
+        const price = event.target.elements.price.value;
+        const res = await changePricePost(address, price);
+        if (!res) {
+            console.error("Error response from backend is null");
+            return;
+        }
+    }
 
     return (
         <div className="App">
@@ -288,6 +440,84 @@ const App = () => {
                         <label>
                             Price:
                             <input type="text" name="price"/>
+                        </label>
+                        <input type="submit" value="Submit"/>
+                    </form>
+                </div>
+                <div style={{width: 100 + 'vw', height: 10 + 'vh'}}>
+                    Update Username
+                    <form onSubmit={handleUpdateUsername}>
+                        <label>
+                            Name:
+                            <input type="text" name="name"/>
+                        </label>
+                        <input type="submit" value="Submit"/>
+                    </form>
+                </div>
+                <div style={{width: 100 + 'vw', height: 10 + 'vh'}}>
+                    Update Email
+                    <form onSubmit={handleUpdateEmail}>
+                        <label>
+                            Email:
+                            <input type="text" name="email"/>
+                        </label>
+                        <input type="submit" value="Submit"/>
+                    </form>
+                </div>
+                <div style={{width: 100 + 'vw', height: 10 + 'vh'}}>
+                    Transfer User Ownership
+                    <form onSubmit={handleTransferUserOwnership}>
+                        <label>
+                            Address:
+                            <input type="text" name="address"/>
+                        </label>
+                        <input type="submit" value="Submit"/>
+                    </form>
+                </div>
+                <div style={{width: 100 + 'vw', height: 10 + 'vh'}}>
+                    Buy User
+                    <form onSubmit={handleBuyUser}>
+                        <label>
+                            Address:
+                            <input type="text" name="address"/>
+                        </label>
+                        <label>
+                            Price:
+                            <input type="text" name="price"/>
+                        </label>
+                        <input type="submit" value="Submit"/>
+                    </form>
+                </div>
+                <div style={{width: 100 + 'vw', height: 10 + 'vh'}}>
+                    Follow User
+                    <form onSubmit={handleFollowUser}>
+                        <label>
+                            Address:
+                            <input type="text" name="address"/>
+                        </label>
+                        <input type="submit" value="Submit"/>
+                    </form>
+                </div>
+                <div style={{width: 100 + 'vw', height: 10 + 'vh'}}>
+                    Change Price Post
+                    <form onSubmit={handleChangePricePost}>
+                        <label>
+                            Address:
+                            <input type="text" name="address"/>
+                        </label>
+                        <label>
+                            Price:
+                            <input type="text" name="price"/>
+                        </label>
+                        <input type="submit" value="Submit"/>
+                    </form>
+                </div>
+                <div style={{width: 100 + 'vw', height: 10 + 'vh'}}>
+                    Like Post
+                    <form onSubmit={handleLikePost}>
+                        <label>
+                            Address:
+                            <input type="text" name="address"/>
                         </label>
                         <input type="submit" value="Submit"/>
                     </form>

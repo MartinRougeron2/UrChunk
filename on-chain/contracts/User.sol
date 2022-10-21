@@ -73,10 +73,10 @@ contract User is IUser {
         address oldOwner = owner;
         // transfer ownership
         owner = payable(msg.sender);
-        // transfer money
-        payable(oldOwner).transfer(msg.value);
         // emit event of ownership change
         emit OwnershipTransferred(oldOwner, owner);
+        // transfer money
+        payable(oldOwner).transfer(msg.value);
     }
 
 
@@ -93,10 +93,10 @@ contract User is IUser {
     // buy a post
     function buyPost(address _post) public payable override {
         Post post = Post(_post);
-        // buy the post
-        post.buy{value: msg.value}(address(this));
         // emit event of post creation
         emit PostBuyFromUser(_post);
+        // buy the post
+        post.buy{value : msg.value}(address(this));
     }
 
     // detect if a post is owned by the user

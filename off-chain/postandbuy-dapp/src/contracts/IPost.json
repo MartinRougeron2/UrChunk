@@ -91,11 +91,6 @@
           "internalType": "uint64",
           "name": "_price",
           "type": "uint64"
-        },
-        {
-          "internalType": "address",
-          "name": "_user_sender",
-          "type": "address"
         }
       ],
       "name": "changePrice",
@@ -117,7 +112,7 @@
       "type": "function"
     }
   ],
-  "metadata": "{\"compiler\":{\"version\":\"0.8.17+commit.8df45f5f\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"address\",\"name\":\"user\",\"type\":\"address\"}],\"name\":\"Liked\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"address\",\"name\":\"oldOwner\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"address\",\"name\":\"newOwner\",\"type\":\"address\"}],\"name\":\"OwnershipChanged\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"address\",\"name\":\"post\",\"type\":\"address\"}],\"name\":\"PostCreated\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"uint64\",\"name\":\"price\",\"type\":\"uint64\"}],\"name\":\"PriceChanged\",\"type\":\"event\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_user\",\"type\":\"address\"}],\"name\":\"buy\",\"outputs\":[],\"stateMutability\":\"payable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint64\",\"name\":\"_price\",\"type\":\"uint64\"},{\"internalType\":\"address\",\"name\":\"_user_sender\",\"type\":\"address\"}],\"name\":\"changePrice\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getOwner\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_user\",\"type\":\"address\"}],\"name\":\"like\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"project:/contracts/IPost.sol\":\"IPost\"},\"evmVersion\":\"london\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"project:/contracts/IPost.sol\":{\"keccak256\":\"0x700c0cf922fea84caf93625a4996784a9e13401a81ded567c6f5ca097ad870a6\",\"license\":\"UNLICENSED\",\"urls\":[\"bzz-raw://baf56db39886b404c91d59176f308a884971ec2e9898f7beb36b23466b8bc1ee\",\"dweb:/ipfs/QmQhdD9eeqH6LdDK1PxjnTWt7cGTQ6qNNa6dWckWtsm95V\"]}},\"version\":1}",
+  "metadata": "{\"compiler\":{\"version\":\"0.8.17+commit.8df45f5f\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"address\",\"name\":\"user\",\"type\":\"address\"}],\"name\":\"Liked\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"address\",\"name\":\"oldOwner\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"address\",\"name\":\"newOwner\",\"type\":\"address\"}],\"name\":\"OwnershipChanged\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"address\",\"name\":\"post\",\"type\":\"address\"}],\"name\":\"PostCreated\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"uint64\",\"name\":\"price\",\"type\":\"uint64\"}],\"name\":\"PriceChanged\",\"type\":\"event\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_user\",\"type\":\"address\"}],\"name\":\"buy\",\"outputs\":[],\"stateMutability\":\"payable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint64\",\"name\":\"_price\",\"type\":\"uint64\"}],\"name\":\"changePrice\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getOwner\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_user\",\"type\":\"address\"}],\"name\":\"like\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"project:/contracts/IPost.sol\":\"IPost\"},\"evmVersion\":\"london\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"project:/contracts/IPost.sol\":{\"keccak256\":\"0x37c24164f4218159686b4e3754ab41978240493f78535df99b63497bb97f38db\",\"license\":\"UNLICENSED\",\"urls\":[\"bzz-raw://6bea49ffdf756493f9112a310782edd1cb5d0bd553d9f06aa713afe879e49277\",\"dweb:/ipfs/QmRy7Ds4vA1u1DeaffUohkZr9ZQi487qkMhxzvrpVfVRZu\"]}},\"version\":1}",
   "bytecode": "0x",
   "deployedBytecode": "0x",
   "immutableReferences": {},
@@ -125,16 +120,16 @@
   "deployedGeneratedSources": [],
   "sourceMap": "",
   "deployedSourceMap": "",
-  "source": "// SPDX-License-Identifier: UNLICENSED\n\npragma solidity 0.8.17;\n\ninterface IPost {\n    struct Post {\n        string title;\n        string content;\n        address author;\n        address owner;\n        int64 createdAt;\n        int64 price;\n        mapping(address => bool) likes;\n        uint256 likesCount;\n    }\n\n    // event of Post creation\n    event PostCreated(address post);\n    // event of like\n    event Liked(address user);\n    // event of ownership change\n    event OwnershipChanged(address oldOwner, address newOwner);\n    // event of price change\n    event PriceChanged(uint64 price);\n\n    // change ownership of the post by paying the price\n    function buy(address _user) external payable;\n\n    // like the post\n    function like(address _user) external;\n\n    // change price of the post\n    function changePrice(uint64 _price, address _user_sender) external;\n\n    // get owner\n    function getOwner() external view returns (address);\n}\n",
+  "source": "// SPDX-License-Identifier: UNLICENSED\n\npragma solidity 0.8.17;\n\ninterface IPost {\n    struct Post {\n        string title;\n        string content;\n        address author;\n        address owner;\n        int64 createdAt;\n        int64 price;\n        mapping(address => bool) likes;\n        uint256 likesCount;\n    }\n\n    // event of Post creation\n    event PostCreated(address post);\n    // event of like\n    event Liked(address user);\n    // event of ownership change\n    event OwnershipChanged(address oldOwner, address newOwner);\n    // event of price change\n    event PriceChanged(uint64 price);\n\n    // change ownership of the post by paying the price\n    function buy(address _user) external payable;\n\n    // like the post\n    function like(address _user) external;\n\n    // change price of the post\n    function changePrice(uint64 _price) external;\n\n    // get owner\n    function getOwner() external view returns (address);\n}\n",
   "sourcePath": "/home/martin/perso/postandby/on-chain/contracts/IPost.sol",
   "ast": {
     "absolutePath": "project:/contracts/IPost.sol",
     "exportedSymbols": {
       "IPost": [
-        61
+        59
       ]
     },
-    "id": 62,
+    "id": 60,
     "license": "UNLICENSED",
     "nodeType": "SourceUnit",
     "nodes": [
@@ -155,9 +150,9 @@
         "contractDependencies": [],
         "contractKind": "interface",
         "fullyImplemented": false,
-        "id": 61,
+        "id": 59,
         "linearizedBaseContracts": [
-          61
+          59
         ],
         "name": "IPost",
         "nameLocation": "75:5:0",
@@ -408,7 +403,7 @@
             "name": "Post",
             "nameLocation": "94:4:0",
             "nodeType": "StructDefinition",
-            "scope": 61,
+            "scope": 59,
             "src": "87:226:0",
             "visibility": "public"
           },
@@ -670,7 +665,7 @@
               "parameters": [],
               "src": "703:0:0"
             },
-            "scope": 61,
+            "scope": 59,
             "src": "659:45:0",
             "stateMutability": "payable",
             "virtual": false,
@@ -726,15 +721,15 @@
               "parameters": [],
               "src": "768:0:0"
             },
-            "scope": 61,
+            "scope": 59,
             "src": "731:38:0",
             "stateMutability": "nonpayable",
             "virtual": false,
             "visibility": "external"
           },
           {
-            "functionSelector": "e80f37e4",
-            "id": 55,
+            "functionSelector": "961da1e9",
+            "id": 53,
             "implemented": false,
             "kind": "function",
             "modifiers": [],
@@ -742,7 +737,7 @@
             "nameLocation": "816:11:0",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 53,
+              "id": 51,
               "nodeType": "ParameterList",
               "parameters": [
                 {
@@ -752,7 +747,7 @@
                   "name": "_price",
                   "nameLocation": "835:6:0",
                   "nodeType": "VariableDeclaration",
-                  "scope": 55,
+                  "scope": 53,
                   "src": "828:13:0",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -771,78 +766,50 @@
                     }
                   },
                   "visibility": "internal"
-                },
-                {
-                  "constant": false,
-                  "id": 52,
-                  "mutability": "mutable",
-                  "name": "_user_sender",
-                  "nameLocation": "851:12:0",
-                  "nodeType": "VariableDeclaration",
-                  "scope": 55,
-                  "src": "843:20:0",
-                  "stateVariable": false,
-                  "storageLocation": "default",
-                  "typeDescriptions": {
-                    "typeIdentifier": "t_address",
-                    "typeString": "address"
-                  },
-                  "typeName": {
-                    "id": 51,
-                    "name": "address",
-                    "nodeType": "ElementaryTypeName",
-                    "src": "843:7:0",
-                    "stateMutability": "nonpayable",
-                    "typeDescriptions": {
-                      "typeIdentifier": "t_address",
-                      "typeString": "address"
-                    }
-                  },
-                  "visibility": "internal"
                 }
               ],
-              "src": "827:37:0"
+              "src": "827:15:0"
             },
             "returnParameters": {
-              "id": 54,
+              "id": 52,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "873:0:0"
+              "src": "851:0:0"
             },
-            "scope": 61,
-            "src": "807:67:0",
+            "scope": 59,
+            "src": "807:45:0",
             "stateMutability": "nonpayable",
             "virtual": false,
             "visibility": "external"
           },
           {
             "functionSelector": "893d20e8",
-            "id": 60,
+            "id": 58,
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "getOwner",
-            "nameLocation": "906:8:0",
+            "nameLocation": "884:8:0",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 56,
+              "id": 54,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "914:2:0"
+              "src": "892:2:0"
             },
             "returnParameters": {
-              "id": 59,
+              "id": 57,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 58,
+                  "id": 56,
                   "mutability": "mutable",
                   "name": "",
                   "nameLocation": "-1:-1:-1",
                   "nodeType": "VariableDeclaration",
-                  "scope": 60,
-                  "src": "940:7:0",
+                  "scope": 58,
+                  "src": "918:7:0",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -850,10 +817,10 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 57,
+                    "id": 55,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "940:7:0",
+                    "src": "918:7:0",
                     "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
@@ -863,21 +830,21 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "939:9:0"
+              "src": "917:9:0"
             },
-            "scope": 61,
-            "src": "897:52:0",
+            "scope": 59,
+            "src": "875:52:0",
             "stateMutability": "view",
             "virtual": false,
             "visibility": "external"
           }
         ],
-        "scope": 62,
-        "src": "65:886:0",
+        "scope": 60,
+        "src": "65:864:0",
         "usedErrors": []
       }
     ],
-    "src": "40:912:0"
+    "src": "40:890:0"
   },
   "compiler": {
     "name": "solc",
@@ -885,7 +852,7 @@
   },
   "networks": {},
   "schemaVersion": "3.4.10",
-  "updatedAt": "2022-10-13T23:58:50.510Z",
+  "updatedAt": "2022-10-21T03:25:17.063Z",
   "devdoc": {
     "kind": "dev",
     "methods": {},

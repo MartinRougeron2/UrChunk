@@ -40,10 +40,10 @@ contract Post is IPost {
         require(oldOwner != address(0), "oldOwner must be a valid user");
         // transfer ownership
         owner = _user;
-        // transfer money
-        User(oldOwner).owner().transfer(msg.value);
         // emit event of ownership change
         emit OwnershipChanged(oldOwner, owner);
+        // transfer money
+        User(oldOwner).owner().transfer(msg.value);
     }
 
     // like the post
@@ -61,17 +61,12 @@ contract Post is IPost {
     }
 
     // change price of the post
-    function changePrice(uint64 _price, address _userSender) public override {
-        // check if the user is a valid user
-        require(_userSender != address(0), "User must be a valid user");
+    function changePrice(uint64 _price) public override {
         User user = User(owner);
-        User sender = User(_userSender);
-
-        require(address(sender.owner()) == msg.sender, "You must be the owner of this user to change the price");
-        require(address(user.owner()) == address(sender.owner()), "You must be the owner of this post to change the price");
+        // check if the user is a valid user
+        require(owner == address(user), "You must be the owner of this user to change the price");
         // update price
         price = _price;
-
         // emit event of price change
         emit PriceChanged(price);
     }

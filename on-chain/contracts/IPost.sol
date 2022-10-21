@@ -30,7 +30,7 @@ interface IPost {
     function like(address _user) external;
 
     // change price of the post
-    function changePrice(uint64 _price, address _user_sender) external;
+    function changePrice(uint64 _price) external;
 
     // get owner
     function getOwner() external view returns (address);

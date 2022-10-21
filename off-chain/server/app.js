@@ -250,7 +250,7 @@ app.post('/buy-post', async (req, res) => {
     });
 });
 
-// update user name
+// update user name OK
 app.post('/update-username', async (req, res) => {
     res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
     res.setHeader('Access-Control-Allow-Credentials', true);
@@ -284,7 +284,7 @@ app.post('/update-username', async (req, res) => {
     });
 });
 
-// update user email
+// update user email OK
 app.post('/update-email', async (req, res) => {
     res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
     res.setHeader('Access-Control-Allow-Credentials', true);
@@ -305,7 +305,7 @@ app.post('/update-email', async (req, res) => {
         const userContract = await User.at(address);
         // check if user is the same as the one in the token
         const userAddress = await userContract.owner();
-        if (userAddress.toString() !== decoded.address.toString().toLowerCase()) {
+        if (userAddress.toString().toLowerCase() !== decoded.address.toString().toLowerCase()) {
             res.status(401).send('Invalid token');
             return;
         }
@@ -318,7 +318,7 @@ app.post('/update-email', async (req, res) => {
     });
 });
 
-// transfer user ownership
+// transfer user ownership OK
 app.post('/transfer-user-ownership', async (req, res) => {
     res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
     res.setHeader('Access-Control-Allow-Credentials', true);
@@ -334,7 +334,7 @@ app.post('/transfer-user-ownership', async (req, res) => {
             return;
         }
         // get user address from req
-        const address = req.body.address;
+        const address = req.cookies.user;
         // get user contract
         const userContract = await User.at(address);
         // check if user is the same as the one in the token
@@ -352,7 +352,7 @@ app.post('/transfer-user-ownership', async (req, res) => {
     });
 });
 
-// buy user
+// buy user OK
 app.post('/buy-user', async (req, res) => {
     res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
     res.setHeader('Access-Control-Allow-Credentials', true);
@@ -374,12 +374,14 @@ app.post('/buy-user', async (req, res) => {
         // get user owner
         const userOwner = await userContract.owner();
         // check if user is the same as the one in the token
-        if (userOwner.toString().toLowerCase() !== decoded.address.toString().toLowerCase()) {
-            res.status(401).send('Invalid token');
+        if (userOwner.toString().toLowerCase() === decoded.address.toString().toLowerCase()) {
+            res.status(401).send('Invalid user: user already owned');
             return;
         }
+        const addressToBuy = req.body.addressToBuy;
+        const userToBuyContract = await User.at(addressToBuy);
         // buy user
-        await userContract.buyUser({from: decoded.address, value: req.body.price});
+        await userToBuyContract.buyUser({from: decoded.address, value: req.body.price});
         // update user in database
         await UserDB.updateOne({address: userAddress}, {owner: decoded.address});
         // return success
@@ -387,7 +389,7 @@ app.post('/buy-user', async (req, res) => {
     });
 });
 
-// follow user
+// follow user OK
 app.post('/follow-user', async (req, res) => {
     res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
     res.setHeader('Access-Control-Allow-Credentials', true);
@@ -409,12 +411,15 @@ app.post('/follow-user', async (req, res) => {
         // get user owner
         const userOwner = await userContract.owner();
         // check if user is the same as the one in the token
+        console.log(userOwner.toString().toLowerCase());
+        console.log(decoded.address.toString().toLowerCase());
         if (userOwner.toString().toLowerCase() !== decoded.address.toString().toLowerCase()) {
             res.status(401).send('Invalid token');
             return;
         }
+        const addressToFollow = req.body.addressToFollow;
         // follow user
-        await userContract.followUser({from: decoded.address});
+        await userContract.follow(addressToFollow, {from: decoded.address});
         // update user in database
         await UserDB.updateOne({address: userAddress}, {$push: {followers: decoded.address}});
         // return success
@@ -422,7 +427,7 @@ app.post('/follow-user', async (req, res) => {
     });
 });
 
-// like post
+// like post OK
 app.post('/like-post', async (req, res) => {
     res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
     res.setHeader('Access-Control-Allow-Credentials', true);
@@ -443,13 +448,17 @@ app.post('/like-post', async (req, res) => {
         const postContract = await Post.at(postAddress);
         // get post owner
         const postOwner = await postContract.owner();
+        // get user from post owner
+        const user = await User.at(postOwner);
+        // get user owner
+        const userOwner = await user.owner();
         // check if user is the same as the one in the token
-        if (postOwner !== decoded.address) {
+        if (userOwner.toString().toLowerCase() !== decoded.address.toString().toLowerCase()) {
             res.status(401).send('Invalid token');
             return;
         }
         // like post
-        await postContract.likePost({from: decoded.address});
+        await postContract.like(user.address, {from: decoded.address});
         // update post in database
         await PostDB.updateOne({address: postAddress}, {$push: {likes: decoded.address}});
         // return success
@@ -457,7 +466,7 @@ app.post('/like-post', async (req, res) => {
     });
 });
 
-// post change price
+// post change price OK
 app.post('/post-change-price', async (req, res) => {
     res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
     res.setHeader('Access-Control-Allow-Credentials', true);
@@ -478,8 +487,10 @@ app.post('/post-change-price', async (req, res) => {
         const postContract = await Post.at(postAddress);
         // get post owner
         const postOwner = await postContract.owner();
+        // get user owner of the post
+        const userAddress = await (await User.at(postOwner)).owner();
         // check if user is the same as the one in the token
-        if (postOwner.toString().toLowerCase() !== decoded.address.toString().toLowerCase()) {
+        if (userAddress.toString().toLowerCase() !== decoded.address.toString().toLowerCase()) {
             res.status(401).send('Invalid token');
             return;
         }
