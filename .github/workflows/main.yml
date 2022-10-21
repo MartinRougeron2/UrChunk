@@ -7,16 +7,34 @@ on:
     branches: [ main ]
 
 jobs:
-  test-truffle:
-
+  truffle:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./on-chain
+
     steps:
       - uses: actions/checkout@v2
-      - uses: actions/setup-node@v3.5.1
+      - name: Set up NodeJS
+        uses: actions/setup-node@v2-beta
         with:
-          node-version: 17.9.1
-      - name: Get truffle
-        run: npm install truffle -g
-      - name: Run truffle tests
-        working-directory: ./on-chain
-        run: truffle tests
+          node-version: '17'
+      - name: Cache npm packages
+        uses: actions/cache@v2
+        with:
+          path: ./node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+      - name: Install npm packages
+        run: npm install
+      - name: Start ganache
+        run: |
+          ./node_modules/ganache-cli/cli.js -p 8545 --gasLimit=0x1fffffffffffff --allowUnlimitedContractSize -e 1000000000 > /dev/null &
+          while netstat -lnt | awk '$4 ~ /:8545$/ {exit 1}'; do sleep 5; done
+      - name: Migrate Contracts
+        run: ./node_modules/truffle/build/cli.bundled.js migrate --network development
+      - name: Test Contracts
+        run: ./node_modules/truffle/build/cli.bundled.js test --network development
+      - name: Stop ganache
+        run: kill $(lsof -t -i:8545)
