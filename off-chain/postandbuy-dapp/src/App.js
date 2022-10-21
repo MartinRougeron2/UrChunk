@@ -6,147 +6,21 @@ import {withCookies, Cookies, useCookies} from 'react-cookie';
 // import axios
 import axios from 'axios';
 
-// get jwt token from backend and return it to the frontend
-function login(signature, address, message) {
-    return axios.post('http://localhost:8000/login', {
-        signature: signature,
-        address: address,
-        message: message
-    }).then(res => {
-        console.log(res);
-        return res;
-    }).catch(err => {
-        console.error(err);
-    });
-}
+import {
+    login,
+    createUser,
+    createPost,
+    checkAuth,
+    buyPost,
+    buyUser,
+    changePricePost,
+    followUser,
+    likePost,
+    transferUserOwnership,
+    updateUsername,
+    updateEmail
+} from './requests';
 
-function createUser(name, email, price) {
-    return axios.post('http://localhost:8000/create-user', {
-        name: name,
-        email: email,
-        price: price
-    }).then(res => {
-        console.log(res);
-        return res;
-    }).catch(err => {
-        console.error(err);
-    });
-}
-
-function createPost(title, content, price) {
-    return axios.post('http://localhost:8000/create-post', {
-        title: title,
-        content: content,
-        price: price
-    }).then(res => {
-        console.log(res);
-        return res;
-    }).catch(err => {
-        console.error(err);
-    });
-}
-
-function checkAuth() {
-    return axios.get('http://localhost:8000/check-auth').then(res => {
-        console.log(res);
-        return res;
-    }).catch(err => {
-        console.error(err);
-    });
-}
-
-function buyPost(postAddress, price) {
-    return axios.post('http://localhost:8000/buy-post', {
-        postAddress: postAddress,
-        price: price
-    }).then(res => {
-        console.log(res);
-        return res;
-    }).catch(err => {
-        console.error(err);
-    });
-}
-
-function updateUsername(username) {
-    return axios.post('http://localhost:8000/update-username', {
-        name: username
-    }).then(res => {
-        console.log(res);
-        return res;
-    }).catch(err => {
-        console.error(err);
-    });
-}
-
-function updateEmail(email) {
-    return axios.post('http://localhost:8000/update-email', {
-        email: email
-    }).then(res => {
-        console.log(res);
-        return res;
-    }).catch(err => {
-        console.error(err);
-    });
-}
-
-function transferUserOwnership(newOwner) {
-    return axios.post('http://localhost:8000/transfer-user-ownership', {
-        newOwner: newOwner,
-    }).then(res => {
-        console.log(res);
-        return res;
-    }).catch(err => {
-        console.error(err);
-    });
-
-}
-
-function buyUser(addressToBuy, price) {
-    return axios.post('http://localhost:8000/buy-user', {
-        addressToBuy: addressToBuy,
-        price: price
-    }).then(res => {
-        console.log(res);
-        return res;
-    }).catch(err => {
-        console.error(err);
-    });
-
-}
-
-function followUser(userAddressToFollow) {
-    return axios.post('http://localhost:8000/follow-user', {
-        addressToFollow: userAddressToFollow
-    }).then(res => {
-        console.log(res);
-        return res;
-    }).catch(err => {
-        console.error(err);
-    });
-}
-
-function changePricePost(postAddress, newPrice) {
-    return axios.post('http://localhost:8000/post-change-price', {
-        postAddress: postAddress,
-        price: newPrice
-    }).then(res => {
-        console.log(res);
-        return res;
-    }).catch(err => {
-        console.error(err);
-    });
-}
-
-function likePost(postAddress) {
-    return axios.post('http://localhost:8000/like-post', {
-        postAddress: postAddress
-    }).then(res => {
-        console.log(res);
-        return res;
-    }).catch(err => {
-        console.error(err);
-    });
-}
 
 // Language: javascript
 const App = () => {
