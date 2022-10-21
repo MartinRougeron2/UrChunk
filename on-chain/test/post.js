@@ -45,7 +45,7 @@ contract('Post', function (accounts) {
         const price = await contract.price({from: accounts[0]});
         assert.equal(price, 1, "price is not 1");
 
-        await contract.changePrice(2, contract_user.address, {from: accounts[0]});
+        await contract.changePrice(2, {from: accounts[0]});
 
         let newPrice = await contract.price({from: accounts[0]});
         newPrice = newPrice.toString();
