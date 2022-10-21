@@ -18,7 +18,7 @@ jobs:
       - name: Set up NodeJS
         uses: actions/setup-node@v2-beta
         with:
-          node-version: '17'
+          node-version: '16'
       - name: Cache npm packages
         uses: actions/cache@v2
         with:
