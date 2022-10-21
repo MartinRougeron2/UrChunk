@@ -1,0 +1,24 @@
+
+name: Test
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  test-truffle:
+
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup Node.js environment
+      - uses: actions/setup-node@v3.5.1
+        with:
+          node-version: 17.9.1
+      - name: Get truffle
+        run: npm install truffle -g
+      - name: Run truffle tests
+        working-directory: ./app
+        run: truffle tests
