@@ -30,7 +30,6 @@ router.post('/login', async (req, res) => {
             res.status(500).send('Error generating token');
             return;
         }
-        console.log('setting headers');
 
         res.cookie('token', token, {
             expires: new Date(Date.now() + 3_600_000),
