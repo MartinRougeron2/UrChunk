@@ -18,5 +18,5 @@ jobs:
       - name: Get truffle
         run: npm install truffle -g
       - name: Run truffle tests
-        working-directory: ./app
+        working-directory: ./on-chain
         run: truffle tests
